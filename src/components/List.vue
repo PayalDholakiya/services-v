@@ -5,12 +5,12 @@
       <ul>
         <li
           v-model="isActive"
-          v-for="(list, id) in services"
-          @click="total(list.id, list.amount)"
-          :class="[list.isActive ? 'isActive' : '', 'list', list]"
+          v-for="(list, index) in services"
+          @click="active(index)"
+          :class="[list.isActive ? 'green' : 'red']"
         >
           <span>{{ list.title }}</span
-          ><span>${{ list.amount }}</span>
+          ><span>${{ list.amount }}.00</span>
         </li>
       </ul>
       <hr />
@@ -39,33 +39,35 @@ export default {
   },
 
   methods: {
-    total(id) {
-      console.log(id, 'h')
-      this.services = this.services.map((list) =>
-        list.id === id ? { ...list, isActive: !list.isActive } : list
-      )
+    active(index) {
+      this.services[index].isActive = !this.services[index].isActive
     },
   },
+
   computed: {
     add() {
-      const x = this.services.filter((list) => {
-        if (list.isActive) {
-          const a = list.amount
-          return a
+      var sum = 0
+      this.services.filter((e) => {
+        if (e.isActive) {
+          sum += e.amount
+          console.log(sum)
         }
       })
-      var sum = 0
-      x.forEach((e) => (sum += e.amount))
       return sum
     },
   },
 }
 </script>
 <style scoped>
+* {
+  font-weight: bold;
+}
 .container {
   display: block;
   margin: auto;
+  margin-top: 20%;
   border: 1px solid black;
+  border-radius: 5px;
   height: 45vh;
   width: 40%;
   background-color: rgb(107, 162, 199);
@@ -79,20 +81,20 @@ li {
   display: flex;
   align-items: center;
   padding: 2px;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
   justify-content: space-between;
   list-style-type: none;
   height: 5vh;
   color: white;
-  background-color: rgb(168, 77, 77);
-  margin-top: 3px;
+  background-color: rgb(192, 104, 104);
+  margin-top: 5px;
   margin-right: 15%;
   margin-left: 7%;
   cursor: pointer;
 }
 .list.isActive {
-  background-color: green;
+  background-color: rgb(129, 167, 98);
 }
 
 p {
@@ -103,5 +105,11 @@ p {
 }
 li.selected {
   background-color: rgb(92, 141, 92);
+}
+.green {
+  background-color: green;
+}
+.red {
+  background-color: rgb(192, 104, 104);
 }
 </style>
